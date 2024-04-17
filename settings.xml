@@ -10,7 +10,7 @@
        - previewWidthList: Preview image width in folder list
        - previewWidthDetail: Preview image width in document view
     -->
-    <display siteName="DMS" footNote="" printDisclaimer="true" language="en_GB" theme="bootstrap4" previewWidthList="40" previewWidthDetail="100" onePageMode="true" dateformat="d/m/Y" datetimeformat="d/m/Y  H:i:s" availablelanguages="" overrideTheme="true" previewWidthMenuList="40" previewWidthDropFolderList="100" showFullPreview="true" convertToPdf="true" maxItemsPerPage="0" incItemsPerPage="0" markdownComments="false"/>
+    <display siteName="SeedDMS" footNote="" printDisclaimer="true" language="en_GB" theme="bootstrap4" previewWidthList="40" previewWidthDetail="100" onePageMode="true" dateformat="d/m/Y" datetimeformat="d/m/Y  H:i:s" availablelanguages="" overrideTheme="true" previewWidthMenuList="40" previewWidthDropFolderList="100" showFullPreview="true" convertToPdf="true" maxItemsPerPage="0" incItemsPerPage="0" markdownComments="false"/>
     <!--
        - strictFormCheck: Strict form checking. If set to true, then all fields in the form will be checked for a value. If set to false, then (most) comments and keyword fields become optional. Comments are always required when submitting a review or overriding document status.
        - viewOnlineFileTypes: files with one of the following endings can be viewed online (USE ONLY LOWER CASE CHARACTERS)
@@ -119,7 +119,7 @@
        - dbPass: password for database-access
        - doNotCheckVersion: Whether or not to check the database schema for its correct version.
     -->
-    <database dbDriver="mysql" dbHostname="localhost" dbDatabase="seeddms6" dbUser="seeddms6" dbPass="seeddms6" doNotCheckVersion="false" doNotCheckDBVersion="false"/>
+    <database dbDriver="mysql" dbHostname="localhost" dbDatabase="seeddms" dbUser="seeddms" dbPass="PassW0rD" doNotCheckVersion="false" doNotCheckDBVersion="false"/>
     <!--
        - smtpServer: SMTP Server hostname
        - smtpPort: SMTP Server port
