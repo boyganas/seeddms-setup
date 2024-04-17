@@ -16,6 +16,7 @@ echo
 apt update && apt upgrade -y
 apt install -y mariadb-server mariadb-client nginx
 mariadb -uroot -e "CREATE DATABASE seeddms; GRANT ALL PRIVILEGES ON seeddms.* TO 'seeddms'@'localhost' IDENTIFIED BY 'PassW0rD'; FLUSH PRIVILEGES;"
+systemctl daemon-reload
 service mariadb start
 service mariadb enable
 service nginx enable
