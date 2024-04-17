@@ -52,8 +52,6 @@ mv /etc/php/8.3/fpm/pool.d/www.conf /etc/php/8.3/fpm/pool.d/www.conf.ori
 cp -Rpv  www.conf  /etc/php/8.3/fpm/pool.d/
 mv /etc/php/8.3/fpm/php.ini /etc/php/8.3/fpm/php.ini.ori
 cp -Rpv php.ini /etc/php/8.3/fpm/
-mv /data/www/seeddms/seeddms-6.0.26/languages/en_GB/lang.inc /data/www/seeddms/seeddms-6.0.26/languages/en_GB/lang.inc.ori
-cp -Rpv lang.inc /data/www/seeddms/seeddms-6.0.26/languages/en_GB/
 cp -Rpv seeddms.crt /etc/ssl/certs/
 cp -Rpv seeddms.key /etc/ssl/private/
 echo '<?php phpinfo() ?>' > /data/www/seeddms/www/phpinfo.php
