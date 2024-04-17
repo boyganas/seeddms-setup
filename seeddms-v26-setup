@@ -59,6 +59,7 @@ cp -Rpv seeddms.key /etc/ssl/private/
 echo '<?php phpinfo() ?>' > /data/www/seeddms/www/phpinfo.php
 cp -Rpv restart.conf /etc/systemd/system/mariadb.service.d/
 cp -Rpv restart.conf /etc/systemd/system/nginx.service.d/
+systemctl daemon-reload
 service nginx restart
 service php8.3-fpm restart
 service mariadb restart
