@@ -1,13 +1,13 @@
 #!/bin/bash
 clear
-read -p "Press [Enter] key to start installation..."
+read -p "Press [Enter] key to start installation ..."
 echo
 echo
 apt update && apt upgrade -y
 apt install -y curl software-properties-common dirmngr ca-certificates apt-transport-https sshpass duf plocate tree nfs-common
 echo
 echo
-#read -p "Press [Enter] key to continue MariaDB & Nginx installation..."
+read -p "Press [Enter] key to continue MariaDB & Nginx installation ..."
 curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup |  bash -s -- --mariadb-server-version=10.11
 export LC_ALL=C.UTF-8 
 add-apt-repository ppa:ondrej/php
@@ -15,13 +15,13 @@ echo
 echo
 apt update && apt upgrade -y
 apt install -y mariadb-server mariadb-client nginx
-mariadb -uroot -e "CREATE DATABASE seeddms6; GRANT ALL PRIVILEGES ON seeddms6.* TO 'seeddms6'@'%' IDENTIFIED BY 'seeddms6'; FLUSH PRIVILEGES;"
+mariadb -uroot -e "CREATE DATABASE seeddms; GRANT ALL PRIVILEGES ON seeddms.* TO 'seeddms'@'localhost' IDENTIFIED BY 'PassW0rD'; FLUSH PRIVILEGES;"
 service mariadb start
 service mariadb enable
 service nginx enable
 echo
 echo
-read -p "Press [Enter] key to continue PHP plugins installation..."
+read -p "Press [Enter] key to continue PHP plugins installation ..."
 apt update
 apt install -y php8.3-common php8.3-fpm php8.3-zip php8.3-bz2 php8.3-mysql php8.3-xml php8.3-xmlrpc php8.3-curl php8.3-gd php8.3-imagick php8.3-cli php8.3-dev php8.3-imap php8.3-mbstring php8.3-opcache php8.3-soap php8.3-redis php8.3-intl php8.3-sqlite3
 echo
@@ -32,18 +32,17 @@ pear install Log
 pear channel-update pear.php.net
 echo
 echo
-read -p "Press [Enter] key to start SeedDMS installation..."
+read -p "Press [Enter] key to start SeedDMS installation ..."
 wget https://sourceforge.net/projects/seeddms/files/seeddms-6.0.26/seeddms-quickstart-6.0.26.tar.gz
 tar xzf seeddms-quickstart-6.0.26.tar.gz
 mkdir -p /data/www/seeddms/data/1048576
-mkdir /root/edomsdb-old
 mkdir -p /etc/systemd/system/nginx.service.d/
 mkdir -p /etc/systemd/system/mariadb.service.d/
 cp -ar seeddms60x/* /data/www/seeddms/
 rm -rf seeddms60x/
 echo
 echo
-read -p "Press [Enter] key to copy files..."
+read -p "Press [Enter] key to copy configuration files ..."
 mv /etc/nginx/sites-available/default /etc/nginx/sites-available/default.ori
 cp -Rpv default /etc/nginx/sites-available/
 mv /data/www/seeddms/conf/settings.xml /data/www/seeddms/conf/settings.xml.ori
@@ -59,7 +58,6 @@ cp -Rpv seeddms.key /etc/ssl/private/
 echo '<?php phpinfo() ?>' > /data/www/seeddms/www/phpinfo.php
 cp -Rpv restart.conf /etc/systemd/system/mariadb.service.d/
 cp -Rpv restart.conf /etc/systemd/system/nginx.service.d/
-systemctl daemon-reload
 service nginx restart
 service php8.3-fpm restart
 service mariadb restart
@@ -80,7 +78,7 @@ echo
 echo
 echo
 read -p "INSTALLATION DONE [Enter] ..."
-echo  "Run ( mysql_secure_installation ) in terminal to secure MariaDB..."
+echo  "Run ( mysql_secure_installation ) in terminal to secure MariaDB ..."
 echo
 echo
 echo
