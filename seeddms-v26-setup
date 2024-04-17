@@ -1,0 +1,87 @@
+#!/bin/bash
+clear
+read -p "Press [Enter] key to start installation..."
+echo
+echo
+apt update && apt upgrade -y
+apt install -y curl software-properties-common dirmngr ca-certificates apt-transport-https sshpass duf plocate tree nfs-common
+echo
+echo
+#read -p "Press [Enter] key to continue MariaDB & Nginx installation..."
+curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup |  bash -s -- --mariadb-server-version=10.11
+export LC_ALL=C.UTF-8 
+add-apt-repository ppa:ondrej/php
+echo
+echo
+apt update && apt upgrade -y
+apt install -y mariadb-server mariadb-client nginx
+mariadb -uroot -e "CREATE DATABASE seeddms6; GRANT ALL PRIVILEGES ON seeddms6.* TO 'seeddms6'@'%' IDENTIFIED BY 'seeddms6'; FLUSH PRIVILEGES;"
+service mariadb start
+service mariadb enable
+service nginx enable
+echo
+echo
+read -p "Press [Enter] key to continue PHP plugins installation..."
+apt update
+apt install -y php8.3-common php8.3-fpm php8.3-zip php8.3-bz2 php8.3-mysql php8.3-xml php8.3-xmlrpc php8.3-curl php8.3-gd php8.3-imagick php8.3-cli php8.3-dev php8.3-imap php8.3-mbstring php8.3-opcache php8.3-soap php8.3-redis php8.3-intl php8.3-sqlite3
+echo
+echo
+read -p "Press [Enter] key to continue WebDAV installation..."
+pear install HTTP_WebDAV_Server-1.0.0RC8
+pear install Log
+pear channel-update pear.php.net
+echo
+echo
+read -p "Press [Enter] key to start SeedDMS installation..."
+wget https://sourceforge.net/projects/seeddms/files/seeddms-6.0.26/seeddms-quickstart-6.0.26.tar.gz
+tar xzf seeddms-quickstart-6.0.26.tar.gz
+mkdir -p /data/www/seeddms/data/1048576
+mkdir /root/edomsdb-old
+mkdir -p /etc/systemd/system/nginx.service.d/
+mkdir -p /etc/systemd/system/mariadb.service.d/
+cp -ar seeddms60x/* /data/www/seeddms/
+rm -rf seeddms60x/
+echo
+echo
+read -p "Press [Enter] key to copy files..."
+mv /etc/nginx/sites-available/default /etc/nginx/sites-available/default.ori
+cp -Rpv default /etc/nginx/sites-available/
+mv /data/www/seeddms/conf/settings.xml /data/www/seeddms/conf/settings.xml.ori
+cp -Rpv settings.xml /data/www/seeddms/conf/
+mv /etc/php/8.3/fpm/pool.d/www.conf /etc/php/8.3/fpm/pool.d/www.conf.ori
+cp -Rpv  www.conf  /etc/php/8.3/fpm/pool.d/
+mv /etc/php/8.3/fpm/php.ini /etc/php/8.3/fpm/php.ini.ori
+cp -Rpv php.ini /etc/php/8.3/fpm/
+mv /data/www/seeddms/seeddms-6.0.26/languages/en_GB/lang.inc /data/www/seeddms/seeddms-6.0.26/languages/en_GB/lang.inc.ori
+cp -Rpv lang.inc /data/www/seeddms/seeddms-6.0.26/languages/en_GB/
+cp -Rpv seeddms.crt /etc/ssl/certs/
+cp -Rpv seeddms.key /etc/ssl/private/
+echo '<?php phpinfo() ?>' > /data/www/seeddms/www/phpinfo.php
+cp -Rpv restart.conf /etc/systemd/system/mariadb.service.d/
+cp -Rpv restart.conf /etc/systemd/system/nginx.service.d/
+systemctl daemon-reload
+service nginx restart
+service php8.3-fpm restart
+service mariadb restart
+chown -R www-data:www-data /data/www/seeddms
+touch /data/www/seeddms/conf/ENABLE_INSTALL_TOOL
+echo
+echo
+echo
+echo "Run installation in web using https://$(hostname -I | awk '{print $1}')/install/ ... (UserID: admin / Password: admin) ..."
+echo
+echo
+read -p "Please continue setup in web ..."
+echo
+echo
+read -p "Press [Enter] key to start remove ENABLE_INSTALL_TOOL ..."
+mv /data/www/seeddms/conf/ENABLE_INSTALL_TOOL /data/www/seeddms/conf/ENABLE_INSTALL_TOOL-old
+echo
+echo
+echo
+read -p "INSTALLATION DONE [Enter] ..."
+echo  "Run ( mysql_secure_installation ) in terminal to secure MariaDB..."
+echo
+echo
+echo
+echo "DONE"

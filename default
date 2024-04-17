@@ -1,0 +1,41 @@
+server {
+    listen 80;
+    server_name _;
+
+    root   /data/www/seeddms/www;
+    index  index.php index.html index.htm;
+
+
+    listen 443 http2 ssl;
+    ssl_certificate      /etc/ssl/certs/seeddms.crt;
+    ssl_certificate_key  /etc/ssl/private/seeddms.key;
+
+    access_log           /var/log/nginx/seedms.access.log;
+    error_log            /var/log/nginx/seeddms.error.log;
+
+    # output just FastCGI requests to it's own Nginx log file
+    access_log           /var/log/nginx/phpfpm-access.log;
+    error_log            /var/log/nginx/error.log debug;
+
+    client_max_body_size 100M;
+
+    location / {
+    try_files $uri $uri/ /index.php$is_args$args;
+    }
+
+    location ~ \.php$ {
+         include snippets/fastcgi-php.conf;
+         fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;
+         #fastcgi_pass  127.0.0.1:9000;
+         include fastcgi_params;
+         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+         fastcgi_intercept_errors on;
+    }
+
+    # serve static files directly
+    location ~* ^.+.(jpg|jpeg|gif|css|png|js|ico|html|xml|txt)$ {
+         access_log        off;
+         expires           max;
+    }
+
+}
