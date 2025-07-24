@@ -4,7 +4,7 @@ sudo apt update
 
 sudo apt install git -y
 
-git clone git clone https://github.com/boyganas/seeddms-setup.git
+git clone https://github.com/boyganas/seeddms-setup.git
 
 cd seeddms-setup/
 
